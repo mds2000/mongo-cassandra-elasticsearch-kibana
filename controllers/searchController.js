@@ -1,3 +1,4 @@
-export async function addGame(){
-    console.log("Adding game...")
+export async function addGame(req, res) {
+  console.log("Adding game...");
+  return res.sendStatus(200);
 }
