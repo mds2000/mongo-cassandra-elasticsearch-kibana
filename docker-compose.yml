@@ -12,5 +12,17 @@ services:
     volumes:
       - games-data:/var/data/mongo
 
+  games-cassandra:
+    image: cassandra
+    restart: always
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_USER=admin
+      - CASSANDRA_PASSWORD=admin
+    volumes:
+      - activity-tracking-data:/var/data/cassandra
+  
 volumes:
   games-data:
+  activity-tracking-data:
