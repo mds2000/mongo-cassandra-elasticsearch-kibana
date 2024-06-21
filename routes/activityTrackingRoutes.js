@@ -1,11 +1,12 @@
 import { Router } from "express";
+import { insertActivity } from "../controllers/activityTrackingController.js";
 const router = Router();
 
-//router.post("/games", addGame);
+router.post("/activity", insertActivity);
 
 export default router;
 
-// Dynamic import of cassandra-driver
+/*  // Dynamic import of cassandra-driver
 import('cassandra-driver').then((cassandra) => {
     // Crea una instancia del cliente
     const client = new cassandra.Client({
@@ -24,6 +25,12 @@ import('cassandra-driver').then((cassandra) => {
     const eventData = { 'score': '1000', 'lives': '3' };
     const levelAchieved = '1';
 
+    // Aquí es donde un desarrollador podría agregar sus propios indicadores
+    const developerData = { 'new_indicator': 'value' };
+
+    // Combina eventData y developerData
+    const combinedData = { ...eventData, ...developerData };
+    
     // Define la consulta de inserción
     const query = 'INSERT INTO user_activity (user_id, game_id, session_id, event_type, event_timestamp, event_data, level_achieved) VALUES (?, ?, ?, ?, ?, ?, ?)';
     const params = [userId, gameId, sessionId, eventType, eventTimestamp, eventData, levelAchieved];
@@ -34,6 +41,7 @@ import('cassandra-driver').then((cassandra) => {
         .catch(error => console.error(error))
         .finally(() => client.shutdown());
 });
+
 /*
 * // Dynamic import of cassandra-driver
 import('cassandra-driver').then((cassandra) => {
