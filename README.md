@@ -32,7 +32,7 @@ npm start
 
 ## Probar endpoints
 
-Para probar los endpoints se puede utilizar el archivo **Postman.collections.json**
+Para probar los endpoints se puede utilizar **Postman**, importando el archivo **Postman.collections.json**.
 
 ## Búsqueda de videojuegos con Elasticsearch y Kibana
 
