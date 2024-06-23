@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "cd6ca250-a6ef-4f91-9b8e-d4d1dac65e15",
+		"name": "Obl BDNR",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26354273"
+	},
+	"item": [
+		{
+			"name": "Create game",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Rust\",\n    \"category\": \"MMO\",\n    \"price\": 17.25,\n    \"languages\": [\n        \"Spanish\",\n        \"English\"\n    ],\n    \"offer\": \"25% off\",\n    \"monthlyDownloads\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/games",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"games"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get games",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"games"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sync with Elastic",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/games/sync-elastic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"games",
+						"sync-elastic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create activity",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": \"a114abf9-2077-4c80-bddc-8848b4938887\",\n    \"gameId\": \"7c7d3a6d-b9b4-4bf9-843f-3995448f9557\",\n    \"sessionId\": \"0c8c0709-cfd8-454b-9d78-f882bc6689fe\",\n    \"eventType\": \"dfhd\",\n    \"eventTimestamp\": \"2024-06-23T04:08:27\",\n    \"eventData\": \"data\",\n    \"levelAchieved\": \"3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/tracking/activity",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"tracking",
+						"activity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get activities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/tracking/activity",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"tracking",
+						"activity"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

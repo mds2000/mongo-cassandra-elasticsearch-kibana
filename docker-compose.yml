@@ -11,6 +11,16 @@ services:
       - "27017:27017"
     volumes:
       - games-data:/var/data/mongo
+  games-cassandra:
+    image: cassandra
+    restart: always
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_USER=admin
+      - CASSANDRA_PASSWORD=admin
+    volumes:
+      - activity-tracking-data:/var/data/cassandra  
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
     environment:
@@ -33,3 +43,4 @@ services:
 volumes:
   games-data:
   es-data:
+  activity-tracking-data:
