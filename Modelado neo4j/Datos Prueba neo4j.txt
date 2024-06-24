@@ -1,0 +1,107 @@
+
+// Creando usuarios
+CREATE CONSTRAINT FOR (u:Usuario) REQUIRE u.email IS UNIQUE;
+
+CREATE (:Usuario {nombre: 'Renzo Jose', email: 'RenzoJose@email.com'}),
+       (:Usuario {nombre: 'UsuarioTroll', email: 'BNDR@email.com'}),
+       (:Usuario {nombre: 'Juan Gabito', email: 'JuanGabito@email.com'}),
+       (:Usuario {nombre: 'Obligatorio', email: 'Obligatorio@email.com'});
+
+// Creando comunidades
+CREATE (:Comunidad {nombre: 'StarWars'})
+MERGE (:Comunidad {nombre: 'StarWars'})
+CREATE (:Comunidad {nombre: 'BDNR'})
+MERGE (:Comunidad {nombre: 'BDNR'});
+
+// Relacionando 'Juan Gabito' con 'StarWars'
+MATCH (u1:Usuario {nombre: 'Juan Gabito'}), (c1:Comunidad {nombre: 'StarWars'})
+MERGE (u1)-[:PERTENECE_A]->(c1);
+
+// Relacionando todos los usuarios con 'BDNR'
+MATCH (u3:Usuario), (c3:Comunidad {nombre: 'BDNR'})
+MERGE (u3)-[:PERTENECE_A]->(c3);
+
+// Haciendo amigos
+MATCH (u1:Usuario {nombre: 'Renzo Jose'}), 
+      (u2:Usuario {nombre: 'Juan Gabito'}),
+      (u3:Usuario {nombre: 'Obligatorio'}),
+      (u4:Usuario {nombre: 'UsuarioTroll'})
+WHERE u1 <> u2 AND u1 <> u3 AND u1 <> u4 AND u2 <> u3 AND u2 <> u4 AND u3 <> u4
+MERGE (u1)-[:AMIGOS]->(u2)
+MERGE (u1)-[:AMIGOS]->(u3)
+MERGE (u2)-[:AMIGOS]->(u4)
+MERGE (u1)-[:AMIGOS]->(u4);
+
+
+// Crear nodos de Videojuego y relacionar con Géneros
+MERGE (:Videojuego {nombre: 'Dark Souls'})-[:GENERO]->(:Genero {nombre: 'Aventura'});
+MERGE (:Videojuego {nombre: 'Star Wars Galactic Battlefront'})-[:GENERO]->(:Genero {nombre: 'Acción'});
+
+// Realizando compras y relacionando con los nodos de Videojuego ya creados
+MATCH (u:Usuario {nombre: 'Renzo Jose'})
+MERGE (u)-[:REALIZA]->(:Compra {fecha: date(), monto: 49.99})-[:UN]->(:Videojuego {nombre: 'Dark Souls'});
+
+MATCH (u:Usuario {nombre: 'Renzo Jose'})
+MERGE (u)-[:REALIZA]->(:Compra {fecha: date(), monto: 39.99})-[:UN]->(:Videojuego {nombre: 'Star Wars Galactic Battlefront'});
+
+MATCH (u:Usuario {nombre: 'Juan Gabito'})
+MERGE (u)-[:REALIZA]->(:Compra {fecha: date(), monto: 29.99})-[:UN]->(:Videojuego {nombre: 'Star Wars Galactic Battlefront'});
+
+// Crear reseñas sobre videojuegos
+MATCH (u:Usuario {nombre: 'Renzo Jose'}), (v1:Videojuego {nombre: 'Dark Souls'})
+CREATE (u)-[:ESCRIBE]->(:Reseña {contenido: '¡Este juego es desafiante y emocionante!', fecha: date()})-[:SOBRE]->(v1);
+
+MATCH (u:Usuario {nombre: 'Renzo Jose'}), (v2:Videojuego {nombre: 'Star Wars Galactic Battlefront'})
+CREATE (u)-[:ESCRIBE]->(:Reseña {contenido: 'Gran juego para jugar en línea con amigos.', fecha: date()})-[:SOBRE]->(v2);
+
+MATCH (u:Usuario {nombre: 'Juan Gabito'}), (v3:Videojuego {nombre: 'Star Wars Galactic Battlefront'})
+CREATE (u)-[:ESCRIBE]->(:Reseña {contenido: '¡Increíble experiencia de Star Wars!', fecha: date()})-[:SOBRE]->(v3);
+
+// Creando Intereses
+MERGE (:Interes {nombre: 'Videojuegos en línea'})
+MERGE (:Interes {nombre: 'Star Wars'})
+MERGE (:Interes {nombre: 'Bases de Datos'});
+
+// Relacionando intereses con usuarios
+MATCH (u:Usuario {nombre: 'Renzo Jose'})
+MATCH (i1:Interes {nombre: 'Videojuegos en línea'})
+MERGE (u)-[:TIENE_INTERES]->(i1);
+
+MATCH (u:Usuario {nombre: 'Renzo Jose'})
+MATCH (i2:Interes {nombre: 'Star Wars'})
+MERGE (u)-[:TIENE_INTERES]->(i2);
+
+MATCH (u:Usuario {nombre: 'Juan Gabito'})
+MATCH (i3:Interes {nombre: 'Videojuegos en línea'})
+MERGE (u)-[:TIENE_INTERES]->(i3);
+
+MATCH (u:Usuario {nombre: 'Juan Gabito'})
+MATCH (i4:Interes {nombre: 'Star Wars'})
+MERGE (u)-[:TIENE_INTERES]->(i4);
+
+MATCH (u:Usuario {nombre: 'Juan Gabito'})
+MATCH (i5:Interes {nombre: 'Bases de Datos'})
+MERGE (u)-[:TIENE_INTERES]->(i5);
+
+MATCH (u:Usuario {nombre: 'Obligatorio'})
+MATCH (i6:Interes {nombre: 'Bases de Datos'})
+MERGE (u)-[:TIENE_INTERES]->(i6);
+
+// Creando campaña de marketing
+CREATE (:Campaña {nombre: 'Campaña Yedi'});
+
+// Encontrando usuarios con interés en Star Wars y relacionarlos con la campaña
+MATCH (u:Usuario)-[:TIENE_INTERES]->(:Interes {nombre: 'Star Wars'})
+WITH u, COLLECT(u) AS usuarios
+MATCH (c:Campaña {nombre: 'Campaña Yedi'})
+FOREACH (usuario IN usuarios | MERGE (usuario)-[:PARTICIPA_EN]->(c));
+
+// Creando noticias para la campaña
+CREATE (:Noticia {titulo: 'Nueva aventura de Star Wars!', contenido: 'Descubre la emocionante nueva aventura de Star Wars...', fecha: date()})
+CREATE (:Noticia {titulo: 'Oferta especial para fanáticos de Star Wars!', contenido: '¡Aprovecha esta oferta exclusiva para los amantes de Star Wars...', fecha: date()});
+
+// Enviar noticias a las casillas de correo de los usuarios participantes
+MATCH (c:Campaña {nombre: 'Campaña Yedi'})<-[:PARTICIPA_EN]-(u:Usuario)
+MATCH (n:Noticia)
+CREATE (c)-[:GENERA_NOTICIA]->(n)
+CREATE (n)-[:ENVIA]->(:Email {asunto: '¡Nuevas noticias de Star Wars!', contenido: n.contenido})<-[:RECIBE]-(u);
