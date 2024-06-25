@@ -3,7 +3,6 @@ import activityTrackingRoutes from "./routes/activityTrackingRoutes.js";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { Client } from 'cassandra-driver';
 
 dotenv.config();
 
@@ -24,19 +23,5 @@ const main = async () => {
     }
   });
 };
-
-/*Cassandra*/
-
-const client = new Client({
-  contactPoints: ['localhost'],
-  localDataCenter: 'datacenter1',
-  keyspace: 'your_keyspace'
-});
-
-client.connect()
-    .then(() => console.log('Connected to Cassandra'))
-    .catch(err => console.error('Failed to connect to Cassandra', err));
-
-/*Cassandra*/
 
 main();
