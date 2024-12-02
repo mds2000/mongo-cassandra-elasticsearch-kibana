@@ -1,11 +1,5 @@
 # Obligatorio de Bases de Datos No Relacionales
 
-Estudiantes:
-
-- 218472 Matías da Silva
-- 240272 Renzo José
-- 242483 Michel Kuza
-
 # Guía de instalación
 
 ## Levantar bases de datos con Docker
